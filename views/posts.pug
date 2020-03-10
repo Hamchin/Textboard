@@ -4,40 +4,31 @@ html(lang="ja")
     meta(charset="UTF-8")
     link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css", integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm", crossorigin="anonymous")
     title 秘密の匿名掲示板
-  body.container
-    div.my-3
-      a(href="/logout").btn.btn-info.float-right ログアウト
-      h1 秘密の匿名掲示板
-    h2 新規投稿
-    form(method="post" action="/posts")
-      div.form-group
-        textarea(name="content" cols=40 rows=4).form-control
-        input(type="hidden" name="oneTimeToken" value=oneTimeToken)
-      div.form-group
-        button(type="submit").btn.btn-primary 投稿
-    h2 投稿一覧
-    each post in posts
-      div.card.my-3
-        div.card-header
-          - var isPostedByAdmin = (post.postedBy === 'admin')
-          if isPostedByAdmin
-            h5 #{post.id} : 管理人 ★
-          else
+  body
+    nav.navbar.navbar-light.bg-light
+      span.navbar-brand なんでも掃き溜め場
+    div.container.my-5
+      h4 新規投稿
+      form(method="post" action="/post")
+        div.form-group
+          textarea(name="content" cols=40 rows=4).form-control
+          input(type="hidden" name="oneTimeToken" value=oneTimeToken)
+        div(style="height: 50px;").form-group
+          button(type="submit").btn.btn-primary.float-right 投稿
+      h4 投稿一覧
+      each post in posts
+        div.card.my-3
+          div.card-header
             - var originalTrackingId = post.trackingCookie ? post.trackingCookie.split('_')[0] : ''
-            h5 #{post.id} : ID:#{originalTrackingId}
-        div.card-body
-          p(style="white-space:pre; overflow:auto;") #{post.content}
-        div.card-footer
-          p 投稿日時: #{post.formattedCreatedAt}
-          - var isAdmin = (user === 'admin')
-          if isAdmin
-            p 投稿者: #{post.postedBy}
-          - var isDeletable = (user === post.postedBy || isAdmin)
-          if isDeletable
-            form(method="post" action="/posts?delete=1")
-              input(type="hidden" name="id" value=post.id)
-              input(type="hidden" name="oneTimeToken" value=oneTimeToken)
-              button(type="submit").btn.btn-danger.float-right 削除
-
+            span #{post.id} : #{originalTrackingId}
+          div.card-body
+            span(style="white-space:pre; overflow:auto;") #{post.content}
+          div.card-footer
+            span 投稿日時: #{post.formattedCreatedAt}
+            if (trackingId === post.trackingCookie)
+              form(method="post" action="/post/delete")
+                input(type="hidden" name="id" value=post.id)
+                input(type="hidden" name="oneTimeToken" value=oneTimeToken)
+                button(type="submit").btn.btn-danger.float-right 削除
     script(src="https://code.jquery.com/jquery-3.4.1.slim.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js", integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl", crossorigin="anonymous")

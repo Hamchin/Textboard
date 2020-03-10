@@ -1,21 +1,23 @@
 'use strict';
 
 const http = require('http');
-const auth = require('http-auth');
 const router = require('./lib/router');
 
-const basic = auth.basic({
-    realm: 'Enter username and password.',
-    file: './users.htpasswd'
-});
+// const auth = require('http-auth');
+// const file = './users.htpasswd';
+// const realm = 'Enter username and password.';
+// const basic = auth.basic({ realm: realm, file: file });
+// const handleRequest = basic.check((req, res) => router.route(req, res));
 
-const server = http.createServer(basic.check((req, res) => {
-    router.route(req, res);
-})).on('error', (e) => {
-    console.error('Server Error', e);
-}).on('clientError', (e) => {
-    console.error('Client Error', e);
-});
+const handleRequest = (req, res) => router.route(req, res);
+
+const server = http.createServer(handleRequest)
+    .on('error', (e) => {
+        console.error('Server Error', e);
+    })
+    .on('clientError', (e) => {
+        console.error('Client Error', e);
+    });
 
 const port = process.env.PORT || 8000;
 
