@@ -21,10 +21,9 @@ html(lang="ja")
           div.card-header
             - var originalTrackingId = post.trackingCookie ? post.trackingCookie.split('_')[0] : ''
             span #{post.id} : #{originalTrackingId}
+            span.float-right #{post.formattedCreatedAt}
           div.card-body
             span(style="white-space:pre; overflow:auto;") #{post.content}
-          div.card-footer
-            span 投稿日時: #{post.formattedCreatedAt}
             if (trackingId === post.trackingCookie)
               form(method="post" action="/post/delete")
                 input(type="hidden" name="id" value=post.id)
