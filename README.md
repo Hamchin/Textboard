@@ -1,7 +1,5 @@
 # Free-Forum
 
-https://free-forum.herokuapp.com
-
 ## Development
 
 ### Server 1
