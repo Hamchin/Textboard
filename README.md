@@ -1,35 +1,48 @@
-# Free-Forum
-
-https://free-forum.herokuapp.com
+# Textboard
 
 ## Development
 
-### Server 1
+### DB Server
 
-```
-$ node index.js
-```
+#### Start
 
-### Server 2
-
-```
-$ postgres -D /usr/local/var/postgres
+```sh
+$ brew services start postgresql
+$ createdb textboard
 ```
 
-### Server 3
+#### Stop
 
+```sh
+$ dropdb textboard
+$ brew services stop postgresql
 ```
-$ createdb forum
 
-...
+### Web Server
 
-$ dropdb forum
+#### Setup
+
+```sh
+$ npm install
+```
+
+#### Start
+
+```sh
+$ npm start
+```
+
+#### Test
+
+```sh
+$ npm run test
 ```
 
 ## Deployment
 
-```
+```sh
 $ heroku create
 $ heroku addons:create heroku-postgresql:hobby-dev
+$ heroku config:set PGSSLMODE=require
 $ git push heroku master
 ```
